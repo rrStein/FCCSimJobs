@@ -316,7 +316,7 @@ for event in intree:
             Es_eta0.append(e)
         elif (Etas[n.where(Energies == e)[0][0]] - cal1Etamax) == 1:
             Es_eta1.append(e)
-        elif (Etas[n.where(Energies == e)[0][0]]) - cal1Etamax) == -1:
+        elif (Etas[n.where(Energies == e)[0][0]] - cal1Etamax) == -1:
             Es_eta_1.append(e)
             #    else:
         #        continue
@@ -345,18 +345,21 @@ for event in intree:
         MaxInd_1 = argrelextrema(NewE_eta_1, n.greater)
         #MaxInd2 = find_peaks_cwt(NewEnergies,n.arange(1,5))
 
-        Maxes = n.sort(NewEnergies[MaxInd])
+        Maxes0 = n.sort(NewE_eta0[MaxInd0])
+        Maxes1 = n.sort(NewE_eta1[MaxInd1])
+        Maxes_1 = n.sort(NewE_eta_1[MaxInd_1])
         #Maxes2 = n.sort(NewEnergies[MaxInd2])
         #print Maxes
         #print Maxes1
         #print cal1Emax, cal1E2max, Maxes[len(Maxes)-1]
         #print n.amax(Maxes)
-
+    except(IndexError):
+        print "no maxima"
     # If there are any extremums, then check if the largest extremum is bigger than the 1st maximum
     # recorded earlier. If it is, update the 2nd and 1st maxima.
     try:
-        print n.float(Maxes[len(Maxes)-1]), cal1Emax
-        print n.float(Maxes[len(Maxes)-1]), cal1E2max, "\n"
+        #print n.float(Maxes0[len(Maxes0)-1]), cal1Emax
+        #print n.float(Maxes0[len(Maxes0)-1]), cal1E2max, "\n"
         '''if n.float(Maxes[len(Maxes)-1]) > cal1Emax:
             cal1E2max = cal1Emax
             cal1Phi2max = cal1Phimax
@@ -367,24 +370,24 @@ for event in intree:
 
         # If the maximal extremum energy is less than the 1st maximum but greater than the 2nd
         # maximum, set it as the 2nd maximum.
-        if n.float(Maxes[len(Maxes)-1]) < cal1Emax:
-            if n.float(Maxes[len(Maxes)-1]) > cal1E2max:
-                print "found"
-                cal1E2max = Maxes[len(Maxes)-1]
+        if n.float(Maxes0[len(Maxes0)-1]) < cal1Emax:
+            if n.float(Maxes0[len(Maxes0)-1]) > cal1E2max:
+                #print "found"
+                cal1E2max = Maxes0[len(Maxes0)-1]
                 cal1Phi2max = Phis[n.where(Energies == cal1E2max)[0][0]]
                 cal1Eta2max = Etas[n.where(Energies == cal1E2max)[0][0]]
 
         # In all other cases, set the 2nd maximum as the second largest extremum value found
         # to make sure it is a local maxima not a part of the 1st maximum in another cell.
-        if n.float(Maxes[len(Maxes)-1]) == cal1Emax:
-            cal1E2max = Maxes[(len(Maxes)-2)]
+        if n.float(Maxes0[len(Maxes0)-1]) == cal1Emax:
+            cal1E2max = Maxes0[(len(Maxes0)-2)]
             cal1Phi2max = Phis[n.where(Energies == cal1E2max)[0][0]]
             cal1Eta2max = Etas[n.where(Energies == cal1E2max)[0][0]]
-        print cal1E2max
-        print "\n"
+        #print cal1E2max
+        #print "\n"
     except(IndexError):
         cal1E2max = 0.
-        print "2nd max is 0"
+        #print "2nd max is 0"
     #except(ValueError):
     #    continue
     #print cal1Emax, cal1E2max
