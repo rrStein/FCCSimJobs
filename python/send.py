@@ -80,6 +80,12 @@ def getJobInfo(argv):
         short_job_type = "recPos"
         return default_options,job_type,short_job_type,False
 
+    elif '--pionRejection' in argv:
+        default_options = ''
+        job_type = "ntup/pi0rejection"
+        short_job_type = "pi0rej"
+        return default_options,job_type,short_job_type,False
+
     elif '--recSlidingWindow' in argv:
         default_options = 'config/recSlidingWindow.py'
         if '--noise' in argv:
@@ -167,6 +173,7 @@ if __name__=="__main__":
 
     jobTypeGroup = parser.add_mutually_exclusive_group() # Type of job: simulation or reconstruction
     jobTypeGroup.add_argument("--sim", action='store_true', help="Simulation (default)")
+    jobTypeGroup.add_argument("--pionRejection", action='store_true', help="Convert to pion0 rejection variables")
     jobTypeGroup.add_argument("--recPositions", action='store_true', help="Generate positions of cells with deposited energy")
     jobTypeGroup.add_argument("--recSlidingWindow", action='store_true', help="Reconstruction with sliding window")
     jobTypeGroup.add_argument("--recTopoClusters", action='store_true', help="Reconstruction with topo-clusters")
@@ -526,11 +533,13 @@ if __name__=="__main__":
             frun.write('cd $JOBDIR\n')
             if args.mergePileup:
                 frun.write('%s --inName %s\n'%(common_fccsw_command, all_inputs))
-            else:
+            elif not(args.pionRejection):
                 frun.write('%s --inName %s\n'%(common_fccsw_command, input_files[i]))
         if args.recPositions:
             frun.write('python %s/python/Convert.py edm.root $JOBDIR/%s\n'%(current_dir,outfile))
             frun.write('rm edm.root \n')
+        elif args.pionRejection:
+            frun.write('python %s/python/Pionrejection_variables.py %s $JOBDIR/%s\n'%(current_dir,input_files[i], outfile))
         elif args.recTopoClusters or args.recSlidingWindow:
             frun.write('python %s/python/Convert.py $JOBDIR/%s $JOBDIR/clusters.root\n'%(current_dir,outfile))
             ntup_path = outdir.replace('/reco', '/ntup')
