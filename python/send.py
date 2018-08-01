@@ -179,6 +179,7 @@ if __name__=="__main__":
     parser.add_argument("--addPileupNoise", action='store_true', help="Add pile-up noise in qudrature to electronics noise")
     parser.add_argument('--pileup', type=int,  required = '--mergePileup' in sys.argv or '--addPileupNoise' in sys.argv, help='Pileup')
     parser.add_argument("--tripletTracker", action="store_true", help="Use triplet tracker layout instead of baseline")
+    parser.add_argument('--ecalSufix', type=str, help='name of ecal: FCChh_ECalBarrel_withCryostat<suffix>', default = "")
 
     default_options,job_type,short_job_type,sim = getJobInfo(sys.argv)
     parser.add_argument('--jobOptions', type=str, default = default_options, help='Name of the job options run by FCCSW (default config/geantSim.py')
@@ -463,6 +464,8 @@ if __name__=="__main__":
             common_fccsw_command += ' --bFieldOff'
         if sim:
             common_fccsw_command += ' --seed %i'%(seed)
+        if args.ecalSufix:
+            common_fccsw_command += ' --detectorSufix ' + args.ecalSufix + ' '
         if args.noise:
             common_fccsw_command += ' --addElectronicsNoise'
         if args.addPileupNoise:

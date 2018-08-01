@@ -6,6 +6,7 @@ simparser.add_argument('-s','--seed', type=int, help='Seed for the random number
 simparser.add_argument('-N','--numEvents', type=int, help='Number of simulation events to run', required=True)
 simparser.add_argument('--outName', type=str, help='Name of the output file', required=True)
 simparser.add_argument('--detectorPath', type=str, help='Path to detectors', default = "/cvmfs/fcc.cern.ch/sw/releases/0.9.1/x86_64-slc6-gcc62-opt/linux-scientificcernslc6-x86_64/gcc-6.2.0/fccsw-0.9.1-c5dqdyv4gt5smfxxwoluqj2pjrdqvjuj")
+simparser.add_argument('--detectorSufix', type=str, help='name of ecal: FCChh_ECalBarrel_withCryostat<suffix>', default = "")
 
 
 genTypeGroup = simparser.add_mutually_exclusive_group(required = True) # Type of events to generate
@@ -36,11 +37,13 @@ num_events = simargs.numEvents
 seed = simargs.seed
 output_name = simargs.outName
 path_to_detector = simargs.detectorPath
+detector_sufix = simargs.detectorSufix
 print "B field: ", magnetic_field
 print "number of events = ", num_events
 print "seed: ", seed
 print "output name: ", output_name
 print "detectors are taken from: ", path_to_detector
+print "name of the ECal barrel geometry: ", detector_sufix
 if simargs.singlePart:
     energy = simargs.energy
     etaMin = simargs.etaMin
@@ -70,7 +73,6 @@ elif simargs.pythia:
     print "card = ", card
 print "=================================="
 
-
 from Gaudi.Configuration import *
 from GaudiKernel import SystemOfUnits as units
 ##############################################################################################################
@@ -78,7 +80,7 @@ from GaudiKernel import SystemOfUnits as units
 ##############################################################################################################
 detectors_to_use=[path_to_detector+'/Detector/DetFCChhBaseline1/compact/FCChh_DectEmptyMaster.xml',
                   path_to_detector+'/Detector/DetFCChhTrackerTkLayout/compact/Tracker.xml',
-                  path_to_detector+'/Detector/DetFCChhECalInclined/compact/FCChh_ECalBarrel_withCryostat.xml',
+                  path_to_detector+'/Detector/DetFCChhECalInclined/compact/FCChh_ECalBarrel_withCryostat'+str(detector_sufix)+'.xml',
                   path_to_detector+'/Detector/DetFCChhHCalTile/compact/FCChh_HCalBarrel_TileCal.xml',
                   path_to_detector+'/Detector/DetFCChhHCalTile/compact/FCChh_HCalExtendedBarrel_TileCal.xml',
                   path_to_detector+'/Detector/DetFCChhCalDiscs/compact/Endcaps_coneCryo.xml',
