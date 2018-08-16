@@ -542,7 +542,7 @@ if __name__=="__main__":
             frun.write('python %s/python/Convert.py edm.root $JOBDIR/%s\n'%(current_dir,outfile))
             frun.write('rm edm.root \n')
         elif args.pionRejection:
-            frun.write('python %s/python/Pionrejection_variables.py %s $JOBDIR/%s\n'%(current_dir,input_files[i], outfile))
+            frun.write('python %s/python/Pionrejection_variables_v03_ecal_half2nd3rdLayerSmallPhiAllLayers.py %s $JOBDIR/%s\n'%(current_dir,input_files[i], outfile))
         elif args.recTopoClusters or args.recSlidingWindow:
             frun.write('python %s/python/Convert.py $JOBDIR/%s $JOBDIR/clusters.root\n'%(current_dir,outfile))
             ntup_path = outdir.replace('/reco', '/ntup')
